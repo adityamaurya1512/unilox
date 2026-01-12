@@ -18,7 +18,7 @@
     "name": "MacBook Air M2",
     "price": 99900,
     "quantity": 5,
-    "image": "https://images.unsplash.com/photo-1517336714731-489689fd1ca4?auto=format&fit=crop&q=80&w=1000"
+    "image": "https://images.squarespace-cdn.com/content/v1/5e949a92e17d55230cd1d44f/d37449b5-69bd-438d-b552-0a488e48a194/M2Air1YL1x1.png?format=2500w"
   },
   {
     "id": "prod_4",
@@ -32,6 +32,6 @@
     "name": "Keychron K2 Mechanical Keyboard",
     "price": 7999,
     "quantity": 12,
-    "image": "https://images.unsplash.com/photo-1587829741301-30c006095401?auto=format&fit=crop&q=80&w=1000"
+    "image": "https://static0.xdaimages.com/wordpress/wp-content/uploads/wm/2024/03/keychron-v1-max-angle.jpg?w=1600&h=900&fit=crop"
   }
 ]

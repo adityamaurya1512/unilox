@@ -11,6 +11,9 @@ export class Store {
 
     // Configurable N for "Every nth order"
     public readonly NTH_ORDER = 3;
+    
+    // Configurable discount percentage (10% = 0.1)
+    public readonly DISCOUNT_PERCENTAGE = 0.1;
 
     private constructor() {
         this.products = productsData as Product[];
@@ -98,18 +101,27 @@ export class Store {
         return null;
     }
 
-    public validateDiscountCode(code: string): boolean {
+    public validateDiscountCode(code: string): { valid: boolean; reason?: string } {
         const discount = this.discountCodes.find(d => d.code === code);
 
-        // Code must exist, be unused, AND correspond to the CURRENT order slot
-        // User race condition: If someone else stole the slot (orders.length increased), this code is now invalid.
-        const currentNextOrder = this.orders.length + 1;
-
-        if (discount && !discount.isUsed && discount.orderIndexCondition === currentNextOrder) {
-            return true;
+        // Code must exist
+        if (!discount) {
+            return { valid: false, reason: 'Discount code not found' };
         }
 
-        return false;
+        // Code must not be used
+        if (discount.isUsed) {
+            return { valid: false, reason: 'Discount code has already been used' };
+        }
+
+        // Code must correspond to the CURRENT order slot
+        // User race condition: If someone else stole the slot (orders.length increased), this code is now invalid.
+        const currentNextOrder = this.orders.length + 1;
+        if (discount.orderIndexCondition !== currentNextOrder) {
+            return { valid: false, reason: 'Discount code is not valid for this order' };
+        }
+
+        return { valid: true };
     }
 
     public markDiscountUsed(code: string): void {

@@ -67,3 +67,73 @@ export async function addToCart(productId: string, quantity: number): Promise<Ca
   const data = await response.json();
   return data.cart;
 }
+
+/**
+ * Generate discount code (Admin API - if next order is nth order)
+ */
+export async function generateDiscountCode(): Promise<{ code: string | null; discountPercentage: number; message: string }> {
+  const url = getApiUrl('/api/admin/discount/generate');
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: getHeaders(),
+  });
+  
+  if (!response.ok) {
+    throw new Error('Failed to generate discount code');
+  }
+  
+  return response.json();
+}
+
+/**
+ * Get admin statistics
+ */
+export async function getAdminStats() {
+  const url = getApiUrl('/api/admin/stats');
+  const response = await fetch(url, {
+    headers: getHeaders(),
+  });
+  
+  if (!response.ok) {
+    throw new Error('Failed to fetch stats');
+  }
+  
+  return response.json();
+}
+
+/**
+ * Validate a discount code
+ */
+export async function validateDiscountCode(code: string): Promise<{ valid: boolean; discountPercentage?: number; message?: string }> {
+  const url = getApiUrl('/api/discount/validate');
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify({ code }),
+  });
+  
+  if (!response.ok) {
+    throw new Error('Failed to validate discount code');
+  }
+  
+  return response.json();
+}
+
+/**
+ * Checkout - Create order with optional discount code
+ */
+export async function checkout(discountCode?: string) {
+  const url = getApiUrl('/api/checkout');
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify({ discountCode: discountCode || null }),
+  });
+  
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to checkout' }));
+    throw new Error(error.error || 'Failed to checkout');
+  }
+  
+  return response.json();
+}

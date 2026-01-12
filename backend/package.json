@@ -4,6 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon --exec tsx src/index.ts",
+    "start": "NODE_ENV=production tsx src/index.ts",
+    "build": "tsc",
+    "build:frontend": "cd ../frontend && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -21,6 +25,7 @@
     "@types/node": "^25.0.6",
     "nodemon": "^3.1.11",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }

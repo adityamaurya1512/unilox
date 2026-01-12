@@ -22,6 +22,40 @@ app.get('/api/products', (req, res) => {
     res.json(store.getProducts());
 });
 
+// Get cart items for a session
+app.get('/api/cart', (req, res) => {
+    const sessionId = req.headers['x-session-id'] as string;
+    if (!sessionId) {
+        return res.status(400).json({ error: 'Session ID required' });
+    }
+    const store = Store.getInstance();
+    const cartItems = store.getCart(sessionId);
+    res.json(cartItems);
+});
+
+// Add item to cart
+app.post('/api/cart', (req, res) => {
+    const sessionId = req.headers['x-session-id'] as string;
+    if (!sessionId) {
+        return res.status(400).json({ error: 'Session ID required' });
+    }
+    
+    const { productId, quantity } = req.body;
+    if (!productId || !quantity || quantity <= 0) {
+        return res.status(400).json({ error: 'productId and quantity (positive) are required' });
+    }
+    
+    const store = Store.getInstance();
+    const product = store.getProduct(productId);
+    if (!product) {
+        return res.status(404).json({ error: 'Product not found' });
+    }
+    
+    // No stock management - assignment doesn't require it
+    store.addToCart(sessionId, productId, quantity);
+    res.json({ message: 'Item added to cart', cart: store.getCart(sessionId) });
+});
+
 // --- Serve Frontend (Production) ---
 // In production, serve the built frontend static files
 if (process.env.NODE_ENV === 'production') {

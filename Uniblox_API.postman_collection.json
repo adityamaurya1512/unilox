@@ -1,0 +1,249 @@
+{
+	"info": {
+		"_postman_id": "uniblox-api-collection",
+		"name": "Uniblox Ecommerce API",
+		"description": "Complete API collection for Uniblox ecommerce store with discount code system",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Client APIs",
+			"item": [
+				{
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"products"
+							]
+						},
+						"description": "Get a list of all available products"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Cart Items",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-session-id",
+								"value": "{{sessionId}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/cart",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"cart"
+							]
+						},
+						"description": "Get all items in the cart for the current session"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Item to Cart",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-session-id",
+								"value": "{{sessionId}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": \"prod_1\",\n  \"quantity\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/cart",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"cart"
+							]
+						},
+						"description": "Add an item to the cart or update quantity if item already exists"
+					},
+					"response": []
+				},
+				{
+					"name": "Validate Discount Code",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-session-id",
+								"value": "{{sessionId}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"code\": \"DISCOUNT_3_ABC123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/discount/validate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"discount",
+								"validate"
+							]
+						},
+						"description": "Validate a discount code before applying it to the cart"
+					},
+					"response": []
+				},
+				{
+					"name": "Checkout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-session-id",
+								"value": "{{sessionId}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"discountCode\": \"DISCOUNT_3_ABC123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/checkout",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"checkout"
+							]
+						},
+						"description": "Create an order from cart items. Optionally apply a discount code. The discountCode field is optional."
+					},
+					"response": []
+				}
+			],
+			"description": "APIs for client-side operations"
+		},
+		{
+			"name": "Admin APIs",
+			"item": [
+				{
+					"name": "Generate Discount Code",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-session-id",
+								"value": "{{sessionId}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/discount/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"discount",
+								"generate"
+							]
+						},
+						"description": "Generate a discount code if the next order will be the nth order (every 3rd order)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Statistics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-session-id",
+								"value": "{{sessionId}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/stats",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"stats"
+							]
+						},
+						"description": "Get store statistics including total orders, purchase amount, discount codes, and discount amounts"
+					},
+					"response": []
+				}
+			],
+			"description": "Admin APIs for managing discount codes and viewing statistics"
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "sessionId",
+			"value": "test-session-123",
+			"type": "string"
+		}
+	]
+}
